@@ -4,6 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
             addRow();
         });
 
+        function togglePassword() {
+            const pwdInput = document.getElementById('credsAd');
+            const toggleIcon = document.getElementById('togglePasswordBtn');
+            
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                pwdInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
         function addRow(selectedInch = '', details = 'DD ST ', bundles = '', pricePerBundle = '', discount = '') {
             const tbody = document.getElementById('orderTableBody');
             const rowId = Date.now() + Math.random().toString(36).substr(2, 5);
@@ -58,19 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
             tbody.appendChild(tr);
             updateRowSubtotal(rowId);
         }
+
         function enter(){
-        const name = document.getElementById("nameAd").value;
-        const creds = document.getElementById("credsAd").value;
-        
+            const name = document.getElementById("nameAd").value;
+            const creds = document.getElementById("credsAd").value;
+            
             if(name == "admin" && creds == "ElegantFH26"){
-              document.getElementById("formMainPage").style.display = "none";
-              document.getElementById("mainPage").style.display = "block";
+                document.getElementById("formMainPage").style.display = "none";
+                document.getElementById("mainPage").style.display = "block";
             }
             else{
-              document.getElementById("notif").style.display = "block";
+                document.getElementById("notif").style.display = "block";
             }
-
         } 
+
         function deleteRow(rowId) {
             const row = document.getElementById(`row-${rowId}`);
             if (row) {
