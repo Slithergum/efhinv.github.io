@@ -71,13 +71,28 @@
         margin: auto;
         align-items: center;
       }
-      .formCreds input{ 
+      .formCreds input[type="text"],
+      .formCreds input[type="password"]{ 
           width: 25vw;
           height: 30px ;
           margin-block: 10px;
-          padding-inline:5px;
+          padding-inline: 5px;
       }
-       .formCreds button{ 
+      .password-container {
+          position: relative;
+          display: flex;
+          align-items: center;
+      }
+      .password-container input {
+          padding-right: 30px !important;
+      }
+      .toggle-pwd-btn {
+          position: absolute;
+          right: 10px;
+          cursor: pointer;
+          color: #666;
+      }
+      .formCreds button.submit-btn{ 
           width: 10vw;
           height: 30px;
           border-radius: 10px;
@@ -92,7 +107,6 @@
       .notif{
         color:red;
         display: none;
-        
       }
     </style>
 </head>
@@ -116,11 +130,17 @@
                 </div>
             </div>
 
-            <div class="formCreds" align="center" style="margin-top:;">
+            <div class="formCreds" align="center">
                 <h1>Log in</h1>
                 <input type="text" placeholder="Username" id="nameAd" required/>
-                <input type="password" placeholder="password" id="credsAd" value="" required/>
-                <button onclick="enter()">Submit</button>
+                
+                <!-- Password with Show/Hide Toggle -->
+                <div class="password-container">
+                    <input type="password" placeholder="Password" id="credsAd" value="" required/>
+                    <i class="fa-solid fa-eye toggle-pwd-btn" id="togglePasswordBtn" onclick="togglePassword()"></i>
+                </div>
+
+                <button class="submit-btn" onclick="enter()">Submit</button>
                 <br>
                 <p class="notif" id="notif">Incorrect username or password!</p>
             </div>
@@ -128,7 +148,6 @@
     </div>
       
     <div id="mainPage" style="display: none;" >
-  
 
     <header class="no-print bg-white border-b border-stone-200 py-4 px-6 shadow-sm">
         <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -152,7 +171,7 @@
         </div>
     </header>
 
-    <main  class="flex-grow py-8 px-4 sm:px-6">
+    <main class="flex-grow py-8 px-4 sm:px-6">
         <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-stone-200/80 p-6 sm:p-12 print-shadow relative overflow-hidden">
             
             <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-700 via-brand-800 to-stone-900 no-print"></div>
