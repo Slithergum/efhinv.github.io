@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator - Elegant Filipina Hair</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fef2fc',
+                            100: '#fde4fa',
+                            200: '#f9caf4',
+                            700: '#9c0c92',
+                            800: '#cf13c2',
+                            900: '#780971',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            @page {
+                size: auto;
+                margin: 5mm; 
+            }
+            body {
+                background: white !important;
+                color: black !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-shadow {
+                box-shadow: none !important;
+                border: none !important;
+            }
+            input, select, textarea {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+                appearance: none;
+                resize: none;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            img {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+      .formCreds{
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        align-items: center;
+      }
+      .formCreds input{ 
+          width: 25vw;
+          height: 30px ;
+          margin-block: 10px;
+          padding-inline:5px;
+      }
+       .formCreds button{ 
+          width: 10vw;
+          height: 30px;
+          border-radius: 10px;
+          margin-block: 10px;
+          border: 1px solid black;
+      }
+      .formCreds h1{ 
+          font-size:30px;
+          text-decoration: underline;
+          margin-bottom:30px;
+      }
+      .notif{
+        color:red;
+        display: none;
+        
+      }
+    </style>
+</head>
+<body class="bg-brand-50 font-sans text-stone-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <div id="formMainPage">
+ 
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-700 via-brand-800 to-stone-900 no-print"></div>
+
+            <div class="text-center mb-10 pb-6 border-b border-stone-200 relative">
+                <div class="flex justify-center mb-3">
+                    <div class="w-16 h-16 rounded-full bg-brand-800 text-white flex items-center justify-center overflow-hidden shadow-md border-2 border-brand-200">
+                        <img src="https://placehold.co/100x100/cf13c2/ffffff?text=EFH" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/cf13c2/ffffff?text=EFH'">
+                    </div>
+                </div>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold tracking-wider text-brand-900 uppercase">Elegant Filipina Hair</h2>
+                <p class="text-xs sm:text-sm tracking-widest text-stone-500 mt-1 uppercase">Premium 100% Raw Virgin Hair Extensions</p>
+                <div class="text-xs text-stone-400 mt-2 flex justify-center gap-4">
+                    <span><i class="fa-solid fa-location-dot mr-1 text-brand-800"></i> Manila, Philippines</span>
+                    <span><i class="fa-solid fa-envelope mr-1 text-brand-800"></i> info@elegantfilipinahair.com</span>
+                </div>
+            </div>
+
+            <div class="formCreds" align="center" style="margin-top:;">
+                <h1>Log in</h1>
+                <input type="text" placeholder="Username" id="nameAd" required/>
+                <input type="password" placeholder="password" id="credsAd" value="" required/>
+                <button onclick="enter()">Submit</button>
+                <br>
+                <p class="notif" id="notif">Incorrect username or password!</p>
+            </div>
+
+    </div>
+      
+    <div id="mainPage" style="display: none;" >
+  
+
+    <header class="no-print bg-white border-b border-stone-200 py-4 px-6 shadow-sm">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-brand-800 text-white flex items-center justify-center overflow-hidden shadow">
+                    <img src="https://placehold.co/100x100/cf13c2/ffffff?text=EFH" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/cf13c2/ffffff?text=EFH'">
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-xl text-stone-900 tracking-wide">Elegant Filipina Hair</h1>
+                    <p class="text-xs text-stone-500">Invoice Management System</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="clearForm()" class="px-4 py-2 text-sm font-medium text-stone-600 bg-stone-100 hover:bg-stone-200 rounded-lg transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> Reset
+                </button>
+                <button onclick="generatePDF()" class="px-5 py-2.5 text-sm font-medium text-white bg-brand-800 hover:bg-brand-900 rounded-lg shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> Generate PDF / Print
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main  class="flex-grow py-8 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-stone-200/80 p-6 sm:p-12 print-shadow relative overflow-hidden">
+            
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-700 via-brand-800 to-stone-900 no-print"></div>
+
+            <div class="text-center mb-10 pb-6 border-b border-stone-200 relative">
+                <div class="flex justify-center mb-3">
+                    <div class="w-16 h-16 rounded-full bg-brand-800 text-white flex items-center justify-center overflow-hidden shadow-md border-2 border-brand-200">
+                        <img src="https://placehold.co/100x100/cf13c2/ffffff?text=EFH" alt="Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/cf13c2/ffffff?text=EFH'">
+                    </div>
+                </div>
+                <h2 class="font-serif text-3xl sm:text-4xl font-bold tracking-wider text-brand-900 uppercase">Elegant Filipina Hair</h2>
+                <p class="text-xs sm:text-sm tracking-widest text-stone-500 mt-1 uppercase">Premium 100% Raw Virgin Hair Extensions</p>
+                <div class="text-xs text-stone-400 mt-2 flex justify-center gap-4">
+                    <span><i class="fa-solid fa-location-dot mr-1 text-brand-800"></i> Manila, Philippines</span>
+                    <span><i class="fa-solid fa-envelope mr-1 text-brand-800"></i> info@elegantfilipinahair.com</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8 bg-brand-50/50 p-6 rounded-xl border border-stone-100">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1">
+                            <i class="fa-solid fa-user mr-1 text-brand-700"></i> Buyer's Name
+                        </label>
+                        <input type="text" id="buyerName" placeholder="Enter client's full name..." 
+                            class="w-full bg-white border border-stone-300 rounded-lg px-4 py-2.5 text-stone-800 font-medium focus:outline-none focus:ring-2 focus:ring-brand-700 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1">
+                            <i class="fa-solid fa-location-dot mr-1 text-brand-700"></i> Buyer's Address
+                        </label>
+                        <textarea id="buyerAddress" rows="2" placeholder="Enter client's delivery address..." 
+                            class="w-full bg-white border border-stone-300 rounded-lg px-4 py-2 text-stone-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-700 transition-all"></textarea>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1">
+                            <i class="fa-solid fa-calendar mr-1 text-brand-700"></i> Invoice Date
+                        </label>
+                        <input type="date" id="invoiceDate" 
+                            class="w-full bg-white border border-stone-300 rounded-lg px-4 py-2.5 text-stone-800 font-medium focus:outline-none focus:ring-2 focus:ring-brand-700 transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1">
+                            <i class="fa-solid fa-hashtag mr-1 text-brand-700"></i> Invoice No.
+                        </label>
+                        <input type="text" id="invoiceNumber" value="EFH-2026-001" 
+                            class="w-full bg-white border border-stone-300 rounded-lg px-4 py-2.5 text-stone-800 font-medium focus:outline-none focus:ring-2 focus:ring-brand-700 transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-serif font-bold text-lg text-stone-900">Order Details</h3>
+                    <button onclick="addRow()" class="no-print bg-brand-700 hover:bg-brand-800 text-white text-xs font-semibold px-3.5 py-2 rounded-lg shadow-sm hover:shadow transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-plus"></i> Add New Row
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-stone-200">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-stone-900 text-white text-xs font-semibold uppercase tracking-wider">
+                                <th class="py-3 px-4">Description (Inches & Details)</th> 
+                                <th class="py-3 px-4 w-28">Quantity</th>
+                                <th class="py-3 px-4 w-36">Unit Price($)</th>
+                                <th class="py-3 px-4 w-36">Discount ($)</th>
+                                <th class="py-3 px-4 w-36 text-right">Subtotal ($)</th>
+                                <th class="py-3 px-2 w-16 text-center no-print">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody" class="divide-y divide-stone-200 text-sm">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-3 no-print">
+                    <button onclick="addRow()" class="w-full py-3 border-2 border-dashed border-stone-300 hover:border-brand-700 text-stone-600 hover:text-brand-800 font-medium rounded-xl transition-all flex items-center justify-center gap-2 text-sm bg-stone-50/50 hover:bg-brand-50/30">
+                        <i class="fa-solid fa-circle-plus text-lg"></i> Click here to add another item
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-6 border-t border-stone-200 gap-6">
+                <div class="text-xs text-stone-500 space-y-1">
+                    <p class="font-semibold text-stone-700">Payment Terms & Notes:</p>
+                    <p>1. All sales are final upon inspection of raw hair quality.</p>
+                    <p>2. Thank you for choosing Elegant Filipina Hair!</p>
+                </div>
+
+                <div class="w-full sm:w-80 bg-brand-50/60 p-5 rounded-xl border border-stone-200 space-y-3">
+                    <div class="flex justify-between text-sm text-stone-600">
+                        <span>Items Count:</span>
+                        <span id="totalItemsCount" class="font-semibold text-stone-800">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-stone-600">
+                        <span>Total Bundles:</span>
+                        <span id="totalBundlesCount" class="font-semibold text-stone-800">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm text-stone-600 border-t border-stone-200 pt-3">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-tag text-brand-800"></i> Total Discount:</span>
+                        <span id="totalDiscountDisplay" class="font-semibold text-stone-800">$0.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-sm text-stone-600 pt-1">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-truck text-brand-800"></i> Shipping Fee ($):</span>
+                        <input type="number" step="0.01" min="0.00" value="0.00" id="shippingFeeInput" oninput="calculateTotals()"
+                            class="w-28 bg-white border border-stone-300 rounded px-2 py-1 text-right text-stone-800 font-medium focus:outline-none focus:ring-1 focus:ring-brand-700 text-sm">
+                    </div>
+                    <div class="border-t border-stone-200 pt-3 flex justify-between items-center">
+                        <span class="font-serif font-bold text-base text-stone-900 uppercase">Total Amount:</span>
+                        <span id="grandTotalDisplay" class="font-serif font-bold text-2xl text-brand-900">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 pt-8 border-t border-stone-200 flex justify-center text-xs text-stone-500">
+                <div class="w-72 text-center">
+                    <div class="h-10 border-b border-stone-300 mb-2"></div>
+                    <p class="font-medium text-stone-700">Authorized Representative</p>
+                    <p>Elegant Filipina Hair</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('invoiceDate').value = today;
+            addRow();
+        });
+
+        function addRow(selectedInch = '', details = 'DD ST ', bundles = '', pricePerBundle = '', discount = '') {
+            const tbody = document.getElementById('orderTableBody');
+            const rowId = Date.now() + Math.random().toString(36).substr(2, 5);
+
+            const inchesOptions = ['38"','37"','36"', '35"', '34"', '32"', '30"', '28"', '26"', '24"', '22"', '20"', '18"', '16"', '14"', '12"', '10"', '8"', '6"', '4"'];
+            let optionsHTML = '<option value="">Length</option>';
+            inchesOptions.forEach(opt => {
+                const selected = opt === selectedInch ? 'selected' : '';
+                optionsHTML += `<option value="${opt}" ${selected}>${opt}</option>`;
+            });
+
+            const tr = document.createElement('tr');
+            tr.id = `row-${rowId}`;
+            tr.className = "hover:bg-stone-50/80 transition-colors";
+
+            tr.innerHTML = `
+                <td class="py-3 px-4">
+                    <div class="flex items-center gap-2">
+                        <select class="row-inches w-24 bg-stone-50 border border-stone-200 rounded px-2.5 py-2 text-stone-800 text-sm font-semibold focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-700">
+                            ${optionsHTML}
+                        </select>
+                        <input type="text" placeholder="DD ST" value="${details}" 
+                            class="row-details w-28 bg-stone-50 border border-stone-200 rounded px-2.5 py-2 text-stone-800 text-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-700">
+                    </div>
+                </td>
+                <td class="py-3 px-4">
+                    <input type="number" min="0" placeholder="0" value="${bundles}" 
+                        class="row-bundles w-full bg-stone-50 border border-stone-200 rounded px-3 py-2 text-stone-800 text-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-700"
+                        oninput="updateRowSubtotal('${rowId}')">
+                </td>
+                <td class="py-3 px-4">
+                    <input type="number" step="0.01" min="0" placeholder="0.00" value="${pricePerBundle}" 
+                        class="row-price w-full bg-stone-50 border border-stone-200 rounded px-3 py-2 text-stone-800 text-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-700"
+                        oninput="updateRowSubtotal('${rowId}')">
+                </td>
+                <td class="py-3 px-4">
+                    <input type="number" step="0.01" min="0" placeholder="0.00" value="${discount}" 
+                        class="row-discount w-full bg-stone-50 border border-stone-200 rounded px-3 py-2 text-stone-800 text-sm focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-700"
+                        oninput="updateRowSubtotal('${rowId}')">
+                </td>
+                <td class="py-3 px-4 text-right">
+                    <input type="text" readonly placeholder="0.00" 
+                        class="row-subtotal w-full bg-stone-100 border border-stone-200 rounded px-3 py-2 text-stone-800 font-semibold text-sm text-right focus:outline-none">
+                </td>
+                <td class="py-3 px-2 text-center no-print">
+                    <button onclick="deleteRow('${rowId}')" title="Delete Row" class="text-stone-400 hover:text-red-600 p-2 rounded-lg transition-colors">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+            updateRowSubtotal(rowId);
+        }
+        function deleteRow(rowId) {
+            const row = document.getElementById(`row-${rowId}`);
+            if (row) {
+                row.remove();
+                calculateTotals();
+            }
+        }
+
+        function updateRowSubtotal(rowId) {
+            const row = document.getElementById(`row-${rowId}`);
+            if (!row) return;
+
+            const bundlesInput = row.querySelector('.row-bundles');
+            const priceInput = row.querySelector('.row-price');
+            const discountInput = row.querySelector('.row-discount');
+            const subtotalInput = row.querySelector('.row-subtotal');
+
+            const bundles = parseFloat(bundlesInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+            
+            const subtotal = Math.max(0, (bundles * price) - discount);
+
+            subtotalInput.value = subtotal.toFixed(2);
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            const tbody = document.getElementById('orderTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            let totalSubtotal = 0;
+            let totalDiscount = 0;
+            let totalBundles = 0;
+            let totalItems = 0;
+
+            rows.forEach(row => {
+                const subtotalInput = row.querySelector('.row-subtotal');
+                const bundlesInput = row.querySelector('.row-bundles');
+                const discountInput = row.querySelector('.row-discount');
+                
+                const subVal = parseFloat(subtotalInput.value) || 0;
+                const bundleVal = parseInt(bundlesInput.value) || 0;
+                const discountVal = parseFloat(discountInput.value) || 0;
+
+                totalSubtotal += subVal;
+                totalDiscount += discountVal;
+                totalBundles += bundleVal;
+                totalItems += 1;
+            });
+
+            const shippingFee = parseFloat(document.getElementById('shippingFeeInput').value) || 0;
+            const grandTotal = totalSubtotal + shippingFee;
+
+            document.getElementById('totalItemsCount').textContent = totalItems;
+            document.getElementById('totalBundlesCount').textContent = totalBundles;
+            document.getElementById('totalDiscountDisplay').textContent = `$${totalDiscount.toFixed(2)}`;
+            document.getElementById('grandTotalDisplay').textContent = `$${grandTotal.toFixed(2)}`;
+        }
+
+        function clearForm() {
+            document.getElementById('buyerName').value = '';
+            document.getElementById('buyerAddress').value = '';
+            document.getElementById('shippingFeeInput').value = '0.00';
+            document.getElementById('orderTableBody').innerHTML = '';
+            addRow();
+            calculateTotals();
+        }
+
+        function generatePDF() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
